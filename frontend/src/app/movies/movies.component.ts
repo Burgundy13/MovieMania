@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
 import { MovieList } from '../model/movies';
 import { MovieService } from '../service/movie.service';
 
@@ -9,20 +10,28 @@ import { MovieService } from '../service/movie.service';
 })
 export class MoviesComponent implements OnInit {
   movieList: MovieList = new MovieList();
-  constructor(private service: MovieService) {}
+  params = {
+    page: 1,
+    pageSize: 6,
+    sort: '',
+    sortDirection: '',
+  };
+  constructor(private service: MovieService, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.getMovies();
   }
 
   getMovies(): void {
-    this.service.getAllMovies().subscribe({
-      next: (response: MovieList) => {
-        this.movieList = response;
-      },
-      error: (response: any) => {
-        console.log('Error: ', response.statusText);
-      },
+    this.route.params.subscribe((params: Params) => {
+      this.service.getAllMovies(this.params).subscribe({
+        next: (response: MovieList) => {
+          this.movieList = response;
+        },
+        error: (response: any) => {
+          console.log('Error: ', response.statusText);
+        },
+      });
     });
   }
 }
