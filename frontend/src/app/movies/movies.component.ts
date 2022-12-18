@@ -34,4 +34,15 @@ export class MoviesComponent implements OnInit {
       });
     });
   }
+  onPageChange(): void {
+    this.getMovies();
+  }
+  onChange(event: any): void {
+    this.params.sort = event.target.value;
+  }
+  onClickDirection(): void {
+    this.params.sortDirection =
+      this.params.sortDirection == 'asc' ? 'desc' : 'asc';
+    this.ngOnInit();
+  }
 }

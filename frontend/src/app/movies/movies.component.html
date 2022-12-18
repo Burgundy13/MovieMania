@@ -1,3 +1,28 @@
+<div class="row">
+  <div class="col-5 mt-3">
+    <ngb-pagination
+      [collectionSize]="movieList.count"
+      [(page)]="params.page"
+      [pageSize]="params.pageSize"
+      (pageChange)="onPageChange()"
+    ></ngb-pagination>
+  </div>
+  <div class="col-7">
+    <label for="sort">Sort by:</label>
+    <select
+      name="sort"
+      id="sort"
+      class="form-control"
+      (change)="onChange($event)"
+    >
+      <option value="">--</option>
+      <option value="rating">Rating</option>
+      <option value="year">Year</option>
+    </select>
+    <button (click)="onClickDirection()">&UpArrowDownArrow;</button>
+  </div>
+</div>
+
 <div class="row bg-light my-3 py-2" *ngFor="let itemMovie of movieList.results">
   <h2>
     <a href="" class="text-decoration-none">{{ itemMovie.name }}</a> ({{
