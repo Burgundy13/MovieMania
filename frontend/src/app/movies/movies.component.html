@@ -12,7 +12,8 @@
     <select
       name="sort"
       id="sort"
-      class="form-control"
+      class="form-control-lg mx-3 mt-2"
+      style="width: 50%"
       (change)="onChange($event)"
     >
       <option value="">--</option>
@@ -25,9 +26,10 @@
 
 <div class="row bg-light my-3 py-2" *ngFor="let itemMovie of movieList.results">
   <h2>
-    <a href="" class="text-decoration-none">{{ itemMovie.name }}</a> ({{
-      itemMovie.year
-    }})
+    <a [routerLink]="[itemMovie._id]" class="text-decoration-none">{{
+      itemMovie.name
+    }}</a>
+    ({{ itemMovie.year }})
   </h2>
   <p>{{ itemMovie.description }}</p>
   <div class="row">

@@ -1,9 +1,10 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { MovieList } from '../model/movies';
+import { Movie, MovieList } from '../model/movies';
 
 const moviesUrl = 'http://localhost:3000/api/movies';
+const genreUrl = 'http://localhost:3000/api/genres';
 
 @Injectable({
   providedIn: 'root',
@@ -25,6 +26,13 @@ export class MovieService {
     return this.http.get(moviesUrl, options).pipe(
       map((data: any) => {
         return new MovieList(data);
+      })
+    );
+  }
+  getOneMovie(id: number): Observable<Movie> {
+    return this.http.get(`${moviesUrl}/${id}`).pipe(
+      map((data: any) => {
+        return new Movie(data);
       })
     );
   }
