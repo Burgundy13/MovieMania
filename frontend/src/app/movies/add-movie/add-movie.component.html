@@ -53,7 +53,12 @@
             class="form-control"
             formControlName="genre"
           >
-            <option></option>
+            <option
+              *ngFor="let itemGenre of genres"
+              value="{{ itemGenre.name }}"
+            >
+              {{ itemGenre.name }}
+            </option>
           </select>
         </div>
         <div class="col-2">

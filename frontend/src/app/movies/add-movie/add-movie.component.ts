@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params } from '@angular/router';
+import { Genre } from 'src/app/model/genre';
 import { Movie } from 'src/app/model/movies';
 import { MovieService } from 'src/app/service/movie.service';
 
@@ -11,6 +12,7 @@ import { MovieService } from 'src/app/service/movie.service';
 })
 export class AddMovieComponent implements OnInit {
   movie: Movie = new Movie();
+  genres: Genre[] = [];
   button: boolean = false;
 
   form: FormGroup = new FormGroup({
@@ -38,6 +40,7 @@ export class AddMovieComponent implements OnInit {
     if (id) {
       this.getMovie();
     }
+    this.getGenres();
   }
 
   getMovie(): void {
@@ -51,6 +54,16 @@ export class AddMovieComponent implements OnInit {
           console.log('Error : ', response.statusText);
         },
       });
+    });
+  }
+  getGenres(): void {
+    this.service.getAllGenres().subscribe({
+      next: (response: Genre[]) => {
+        this.genres = response;
+      },
+      error: (response: any) => {
+        console.log('Error :', response.statusText);
+      },
     });
   }
 }
