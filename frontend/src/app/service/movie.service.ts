@@ -6,6 +6,7 @@ import { Movie, MovieList } from '../model/movies';
 
 const moviesUrl = 'http://localhost:3000/api/movies';
 const genreUrl = 'http://localhost:3000/api/genres';
+const postUrl = 'http://localhost:3000/api/movie';
 
 @Injectable({
   providedIn: 'root',
@@ -41,6 +42,22 @@ export class MovieService {
     return this.http.get(genreUrl).pipe(
       map((data: any) => {
         return data && data.map((elem: any) => new Genre(elem));
+      })
+    );
+  }
+
+  postGenre(genre: Genre): Observable<any> {
+    return this.http.post(genreUrl, genre);
+  }
+
+  postMovie(movie: Movie): Observable<any> {
+    return this.http.post(postUrl, movie);
+  }
+
+  putMovie(movie: Movie): Observable<any> {
+    return this.http.put(moviesUrl + '/' + movie._id, movie).pipe(
+      map((data: any) => {
+        return new Movie(data);
       })
     );
   }

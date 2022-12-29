@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Genre } from 'src/app/model/genre';
 import { Movie } from 'src/app/model/movies';
 import { MovieService } from 'src/app/service/movie.service';
@@ -33,7 +33,28 @@ export class AddMovieComponent implements OnInit {
     genre: new FormControl(''),
     newGenre: new FormControl(''),
   });
-  constructor(private service: MovieService, private route: ActivatedRoute) {}
+
+  get name() {
+    return this.form.get('name');
+  }
+  get description() {
+    return this.form.get('description');
+  }
+  get year() {
+    return this.form.get('year');
+  }
+  get newGenre() {
+    return this.form.get('newGenre');
+  }
+  get genre() {
+    return this.form.get('genre');
+  }
+
+  constructor(
+    private service: MovieService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     let id: number = Number(this.route.snapshot.params['id']);
@@ -65,5 +86,48 @@ export class AddMovieComponent implements OnInit {
         console.log('Error :', response.statusText);
       },
     });
+  }
+
+  onSave(): void {
+    let id: number = Number(this.route.snapshot.params['id']);
+    let newMovie = new Movie(this.form.value);
+    if (id) {
+      newMovie._id = id;
+      this.service.putMovie(newMovie).subscribe({
+        next: (response: Movie) => {
+          this.router.navigate(['movies']);
+        },
+        error: (response: any) => {
+          console.log('Error :', response.statusText);
+        },
+      });
+    } else {
+      this.service.postMovie(newMovie).subscribe({
+        next: (response: Movie) => {
+          console.log(newMovie);
+        },
+        error: (response: any) => {
+          console.log('Error :', response.statusText);
+        },
+      });
+    }
+  }
+  onPlusClick(): void {
+    this.button = !this.button;
+  }
+  addNewGenre(): void {
+    let newGenre: Genre = new Genre();
+    newGenre.name = this.newGenre?.value;
+
+    this.service.postGenre(newGenre).subscribe({
+      next: (response: any) => {
+        this.getGenres();
+        this.form.patchValue({ genre: newGenre.name });
+      },
+      error: (response: any) => {
+        console.log('Error: ', response.statusText);
+      },
+    });
+    this.button = false;
   }
 }
